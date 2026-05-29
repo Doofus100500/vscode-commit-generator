@@ -1,0 +1,119 @@
+{
+  "name": "commit-generator",
+  "displayName": "Commit Generator",
+  "description": "Generate Russian Git commit messages through a configurable API.",
+  "version": "0.0.1",
+  "publisher": "Doofus",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Doofus100500/vscode-commit-generator.git"
+  },
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Source Control",
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:commitGenerator.generateCommitMessage"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "commitGenerator.generateCommitMessage",
+        "title": "Commit Generator: Generate Commit Message",
+        "category": "Commit Generator",
+        "icon": "$(sparkle)"
+      }
+    ],
+    "menus": {
+      "scm/title": [
+        {
+          "command": "commitGenerator.generateCommitMessage",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Commit Generator",
+      "properties": {
+        "commitGenerator.apiUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Full URL of the chat-completions-compatible API endpoint."
+        },
+        "commitGenerator.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "API key sent to the API. Prefer storing it in user settings, not workspace settings committed to Git."
+        },
+        "commitGenerator.apiKeyHeader": {
+          "type": "string",
+          "default": "Authorization",
+          "description": "HTTP header used for the API key."
+        },
+        "commitGenerator.apiKeyPrefix": {
+          "type": "string",
+          "default": "Bearer",
+          "description": "Optional value prefix for the API key header. Use an empty value to send the raw key."
+        },
+        "commitGenerator.model": {
+          "type": "string",
+          "default": "",
+          "description": "Optional model name sent in the API request body."
+        },
+        "commitGenerator.temperature": {
+          "type": "number",
+          "default": 0.2,
+          "minimum": 0,
+          "maximum": 2,
+          "description": "Sampling temperature sent in the API request body."
+        },
+        "commitGenerator.extraBody": {
+          "type": "string",
+          "default": "",
+          "description": "Optional JSON object merged into the API request body."
+        },
+        "commitGenerator.diffMode": {
+          "type": "string",
+          "enum": [
+            "staged",
+            "unstaged",
+            "auto"
+          ],
+          "default": "staged",
+          "description": "Which Git diff to send to the API. Auto tries staged changes first, then unstaged changes."
+        },
+        "commitGenerator.maxDiffBytes": {
+          "type": "number",
+          "default": 120000,
+          "minimum": 1000,
+          "description": "Maximum diff size, in bytes, sent to the API."
+        },
+        "commitGenerator.timeoutMs": {
+          "type": "number",
+          "default": 120000,
+          "minimum": 10000,
+          "description": "Maximum time to wait for the API."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "check": "npm run compile",
+    "package": "npm run compile && vsce package --no-dependencies",
+    "publish:marketplace": "npm run compile && vsce publish --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.29",
+    "@types/vscode": "^1.95.0",
+    "@vscode/vsce": "^3.3.2",
+    "typescript": "^5.8.3"
+  }
+}
