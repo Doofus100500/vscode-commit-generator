@@ -5,6 +5,7 @@
 - Add configurable commit prompt template.
 - Update the default prompt text.
 - Update GitHub Actions to Node 24-compatible action versions.
+- Add a custom extension icon.
 - Simplify README instructions for building and installing VSIX packages.
 
 ## 0.0.1

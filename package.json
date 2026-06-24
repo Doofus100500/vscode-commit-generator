@@ -4,6 +4,7 @@
   "description": "Generate Russian Git commit messages through a configurable API.",
   "version": "0.0.2",
   "publisher": "Doofus",
+  "icon": "assets/icon.png",
   "license": "MIT",
   "repository": {
     "type": "git",
