@@ -2,7 +2,7 @@
   "name": "commit-generator",
   "displayName": "Commit Generator",
   "description": "Generate Russian Git commit messages through a configurable API.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "Doofus",
   "license": "MIT",
   "repository": {
