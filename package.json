@@ -2,8 +2,9 @@
   "name": "commit-generator",
   "displayName": "Commit Generator",
   "description": "Generate Russian Git commit messages through a configurable API.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "Doofus",
+  "icon": "assets/icon.png",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -76,6 +77,12 @@
           "type": "string",
           "default": "",
           "description": "Optional JSON object merged into the API request body."
+        },
+        "commitGenerator.promptTemplate": {
+          "type": "string",
+          "default": "Сгенерируй сообщение Git-коммита на русском языке для предоставленного diff.\n\nПравила:\nВерни только сообщение коммита.\nНе используй Conventional Commits, списки, кавычки, Markdown и пояснения.\nПиши естественно, кратко и понятно по-русски.\nФормулируй от имени автора изменения в прошедшем времени: Добавил, Исправил, Удалил, Обновил.\nНе используй английский повелительный стиль Git.\nПервая строка должна описывать главное изменение и быть не длиннее 72 символов.\nДобавляй короткое тело только если без него изменение непонятно.\nНе добавляй деталей, которых нет в diff.\n\nDiff mode: {diffMode}\nDiff:\n{diff}",
+          "editPresentation": "multilineText",
+          "description": "Prompt template sent as the user message. Use {diffMode} and {diff} placeholders to include the selected Git diff."
         },
         "commitGenerator.diffMode": {
           "type": "string",
