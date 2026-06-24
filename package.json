@@ -77,6 +77,11 @@
           "default": "",
           "description": "Optional JSON object merged into the API request body."
         },
+        "commitGenerator.promptTemplate": {
+          "type": "string",
+          "default": "Сгенерируй сообщение Git-коммита на русском языке для предоставленного diff.\n\nПравила:\n- Выведи только сообщение коммита.\n- Не используй Conventional Commits или другой формальный шаблон.\n- Пиши естественно и кратко, как обычное сообщение коммита.\n- Первая строка должна быть не длиннее 72 символов.\n- Добавляй короткое тело только если без него изменение непонятно.\n- Основывайся только на diff.\n\nDiff mode: {diffMode}\n\n```diff\n{diff}\n```",
+          "description": "Prompt template sent as the user message. Use {diffMode} and {diff} placeholders to include the selected Git diff."
+        },
         "commitGenerator.diffMode": {
           "type": "string",
           "enum": [

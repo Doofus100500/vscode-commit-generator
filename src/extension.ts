@@ -4,6 +4,24 @@ import * as vscode from "vscode";
 
 type DiffMode = "staged" | "unstaged" | "auto";
 
+const DEFAULT_PROMPT_TEMPLATE = [
+  "Сгенерируй сообщение Git-коммита на русском языке для предоставленного diff.",
+  "",
+  "Правила:",
+  "- Выведи только сообщение коммита.",
+  "- Не используй Conventional Commits или другой формальный шаблон.",
+  "- Пиши естественно и кратко, как обычное сообщение коммита.",
+  "- Первая строка должна быть не длиннее 72 символов.",
+  "- Добавляй короткое тело только если без него изменение непонятно.",
+  "- Основывайся только на diff.",
+  "",
+  "Diff mode: {diffMode}",
+  "",
+  "```diff",
+  "{diff}",
+  "```"
+].join("\n");
+
 interface GitApi {
   repositories: GitRepository[];
 }
@@ -170,6 +188,7 @@ async function runApi(
   const model = config.get<string>("model", "").trim();
   const temperature = config.get<number>("temperature", 0.2);
   const extraBody = parseExtraBody(config.get<string>("extraBody", ""));
+  const promptTemplate = config.get<string>("promptTemplate", DEFAULT_PROMPT_TEMPLATE);
 
   if (!apiUrl) {
     throw new Error("Set commitGenerator.apiUrl before generating a commit message.");
@@ -183,7 +202,7 @@ async function runApi(
     throw new Error("Set commitGenerator.apiKeyHeader before generating a commit message.");
   }
 
-  const prompt = buildPrompt(diffInfo);
+  const prompt = buildPrompt(diffInfo, promptTemplate);
   const requestBody: Record<string, unknown> = {
     messages: [
       {
@@ -220,24 +239,9 @@ async function runApi(
   return sanitizeCommitMessage(extractCommitMessage(responseJson));
 }
 
-function buildPrompt(diffInfo: DiffInfo): string {
-  return [
-    "Сгенерируй сообщение Git-коммита на русском языке для предоставленного diff.",
-    "",
-    "Правила:",
-    "- Выведи только сообщение коммита.",
-    "- Не используй Conventional Commits или другой формальный шаблон.",
-    "- Пиши естественно и кратко, как обычное сообщение коммита.",
-    "- Первая строка должна быть не длиннее 72 символов.",
-    "- Добавляй короткое тело только если без него изменение непонятно.",
-    "- Основывайся только на diff.",
-    "",
-    `Diff mode: ${diffInfo.mode}`,
-    "",
-    "```diff",
-    diffInfo.diff,
-    "```"
-  ].join("\n");
+function buildPrompt(diffInfo: DiffInfo, promptTemplate: string): string {
+  const template = promptTemplate.trim() || DEFAULT_PROMPT_TEMPLATE;
+  return template.replaceAll("{diffMode}", diffInfo.mode).replaceAll("{diff}", diffInfo.diff);
 }
 
 function sanitizeCommitMessage(message: string): string {
