@@ -2,6 +2,8 @@
 
 VS Code extension for generating Russian Git commit messages through a configurable chat-completions-compatible API.
 
+![alt text](image.png)
+
 ## Build from source
 
 Install dependencies:
